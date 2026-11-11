@@ -1414,7 +1414,7 @@ class PWAInstaller {
   init() {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js")
+        navigator.serviceWorker.register("./service-worker.js")
           .then(() => console.log("PWA Service Worker registered offline."))
           .catch(err => console.warn("SW Registration Failed", err));
       });
