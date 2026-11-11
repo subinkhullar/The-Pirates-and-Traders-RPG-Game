@@ -1,0 +1,31 @@
+{
+  "name": "The Pirates and Traders RPG Game by Subin Khullar 😎",
+  "short_name": "Pirates & Traders",
+  "description": "An epic offline maritime RPG of trading, naval battles, relic hunting, and empire building set in 1687.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070d17",
+  "theme_color": "#0b1320",
+  "categories": [
+    "games",
+    "role playing",
+    "simulation",
+    "strategy"
+  ],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230b1726'/%3E%3Ccircle cx='256' cy='256' r='210' fill='%2310253f' stroke='%23d4af37' stroke-width='16'/%3E%3Ccircle cx='256' cy='256' r='100' fill='none' stroke='%23d4af37' stroke-width='12'/%3E%3Cline x1='256' y1='46' x2='256' y2='466' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='46' y1='256' x2='466' y2='256' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='108' y1='108' x2='404' y2='404' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='108' y1='404' x2='404' y2='108' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cpath d='M256 160c-44.2 0-80 35.8-80 80 0 28.3 14.8 53.2 37.1 67.5v28.5h85.8v-28.5c22.3-14.3 37.1-39.2 37.1-67.5 0-44.2-35.8-80-80-80z' fill='%23f5eedb'/%3E%3Ccircle cx='226' cy='236' r='16' fill='%230b1726'/%3E%3Ccircle cx='286' cy='236' r='16' fill='%230b1726'/%3E%3Cpolygon points='256,252 248,272 264,272' fill='%230b1726'/%3E%3Cline x1='230' y1='305' x2='282' y2='305' stroke='%230b1726' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='256' cy='256' r='30' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='14' fill='%230b1726'/%3E%3C/svg%3E",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23070d17'/%3E%3Ccircle cx='256' cy='256' r='180' fill='%2310253f' stroke='%23d4af37' stroke-width='16'/%3E%3Ccircle cx='256' cy='256' r='80' fill='none' stroke='%23d4af37' stroke-width='12'/%3E%3Cline x1='256' y1='76' x2='256' y2='436' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='76' y1='256' x2='436' y2='256' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='129' y1='129' x2='383' y2='383' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='129' y1='383' x2='383' y2='129' stroke='%23d4af37' stroke-width='12' stroke-linecap='round'/%3E%3Cpath d='M256 180c-35 0-64 29-64 64 0 22.6 11.8 42.6 29.7 54v22.8h68.6v-22.8c17.9-11.4 29.7-31.4 29.7-54 0-35-29-64-64-64z' fill='%23f5eedb'/%3E%3Ccircle cx='232' cy='240' r='12' fill='%230b1726'/%3E%3Ccircle cx='280' cy='240' r='12' fill='%230b1726'/%3E%3Ccircle cx='256' cy='256' r='24' fill='%23d4af37'/%3E%3Ccircle cx='256' cy='256' r='10' fill='%230b1726'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
