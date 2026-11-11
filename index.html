@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>The Pirates and Traders RPG Game by Subin Khullar 😎</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="An epic offline maritime RPG of trading, naval battles, relic hunting, and empire building set in 1687.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pirates & Traders">
+  
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-nautical">
+  <!-- Embedded Offline SVG Definitions -->
+  <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <g id="icon-anchor">
+        <path d="M12 2v4m0 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 4v12m-8-6c0 5 4 8 8 8s8-3 8-8m-11 0h6m-12 0h2m14 0h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g id="icon-skull">
+        <path d="M12 2a7 7 0 0 0-7 7c0 3 1.5 5 3.5 6v2h7v-2c2-1 3.5-3 3.5-6a7 7 0 0 0-7-7z" fill="currentColor"/>
+        <circle cx="9" cy="9" r="1.5" fill="#0d1b2a"/>
+        <circle cx="15" cy="9" r="1.5" fill="#0d1b2a"/>
+        <path d="M10 14h4m-3 3h2" stroke="#0d1b2a" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <g id="icon-compass">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+        <polygon points="12,4 14,11 12,10 10,11" fill="#c0392b"/>
+        <polygon points="12,20 14,13 12,14 10,13" fill="#bdc3c7"/>
+        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+      </g>
+      <g id="icon-gold">
+        <circle cx="12" cy="12" r="9" fill="#f1c40f" stroke="#d4ac0d" stroke-width="2"/>
+        <text x="12" y="16" font-size="11" font-weight="bold" text-anchor="middle" fill="#7d6608">G</text>
+      </g>
+      <g id="icon-cannon">
+        <path d="M4 15l10-5 2 1-1 3-10 4z" fill="currentColor"/>
+        <circle cx="9" cy="17" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="9" cy="17" r="1.5" fill="currentColor"/>
+      </g>
+      <g id="icon-swords">
+        <path d="M4 4l7 7m0 0l-3 1-3-3 1-3 5 5zm9 9l7 7m-7-7l1-3 3 3-1 3-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M20 4l-7 7m0 0l3 1 3-3-1-3-5 5zM7 17l-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g id="icon-helm">
+        <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="2"/>
+        <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.9" y1="4.9" x2="19.1" y2="19.1" stroke="currentColor" stroke-width="2"/>
+        <line x1="4.9" y1="19.1" x2="19.1" y2="4.9" stroke="currentColor" stroke-width="2"/>
+      </g>
+      <g id="icon-scroll">
+        <path d="M19 4H8a4 4 0 0 0-4 4v10a2 2 0 0 0 2 2h12a3 3 0 0 0 3-3V7a3 3 0 0 0-2-3zm-2 12H8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <g id="icon-relic">
+        <polygon points="12,2 21,8 18,19 6,19 3,8" fill="none" stroke="#f39c12" stroke-width="2"/>
+        <polygon points="12,6 17,10 15,16 9,16 7,10" fill="#f39c12" opacity="0.6"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- PWA Install Banner Alert -->
+  <div id="pwaInstallBanner" class="pwa-banner hidden">
+    <div class="pwa-banner-content">
+      <svg class="nav-icon"><use href="#icon-anchor"/></svg>
+      <span>Install <strong>The Pirates and Traders RPG</strong> for full offline play!</span>
+    </div>
+    <div class="pwa-banner-actions">
+      <button id="pwaInstallBtn" class="btn btn-gold btn-sm">Install App</button>
+      <button id="pwaDismissBtn" class="btn btn-outline btn-sm">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Audio Context Unlocker Modal (Initial click trigger for browsers) -->
+  <div id="audioUnlockOverlay" class="audio-overlay">
+    <div class="parchment-box audio-unlock-card">
+      <div class="ship-insignia">
+        <svg class="hero-logo"><use href="#icon-helm"/></svg>
+      </div>
+      <h1 class="brand-title">The Pirates and Traders RPG Game</h1>
+      <p class="brand-subtitle">by Subin Khullar 😎</p>
+      <hr class="separator-ornate">
+      <p class="flavor-text">
+        The year is 1687. The waters of the Caribbean and the mysterious Endless Sea whisper of forgotten Tideborn relics, merchant fortunes, and ruthless corsairs.
+      </p>
+      <button id="enterGameBtn" class="btn btn-primary btn-lg pulse-glow">
+        <svg class="btn-icon"><use href="#icon-anchor"/></svg> Weigh Anchor & Embark
+      </button>
+      <p class="system-note">Tap to initialize sound synthesizer & offline cache</p>
+    </div>
+  </div>
+
+  <!-- TOP HUD BAR (Persistent during active gameplay) -->
+  <header id="gameHeader" class="game-header hidden">
+    <div class="header-left">
+      <button id="hudMenuToggleBtn" class="btn-hud" title="Main Menu / Pause">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+      <div class="player-hud-identity">
+        <div class="player-name-plate">
+          <span id="hudPlayerName" class="hud-player-name">Captain</span>
+          <span id="hudCareerBadge" class="hud-career-badge">Merchant</span>
+        </div>
+        <div class="player-rank-plate">
+          <span id="hudCurrentDate" class="hud-date">Mar 15, 1687</span>
+          <span class="hud-separator">|</span>
+          <span id="hudCurrentLocation" class="hud-location">Port Royal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="hud-stat-box" title="Treasury Gold Doubloons">
+        <svg class="hud-stat-icon"><use href="#icon-gold"/></svg>
+        <span id="hudGoldCount" class="stat-value">500</span>
+      </div>
+      <div class="hud-stat-box" title="Flagship Hull Integrity">
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-label">Hull</div>
+          <div class="progress-bar-shell mini">
+            <div id="hudHullBar" class="progress-bar-fill fill-green" style="width: 100%;"></div>
+          </div>
+        </div>
+        <span id="hudHullValue" class="stat-value">100%</span>
+      </div>
+      <div class="hud-stat-box" title="Crew Compliment & Morale">
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-label">Crew</div>
+          <div class="progress-bar-shell mini">
+            <div id="hudMoraleBar" class="progress-bar-fill fill-blue" style="width: 80%;"></div>
+          </div>
+        </div>
+        <span id="hudCrewCount" class="stat-value">15/20</span>
+      </div>
+      <div class="hud-stat-box" title="Hold Cargo Capacity">
+        <svg class="hud-stat-icon"><use href="#icon-scroll"/></svg>
+        <span id="hudCargoCapacity" class="stat-value">12/60 t</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="wind-gauge" id="hudWindIndicator" title="Wind Velocity & Direction">
+        <svg id="hudWindCompass" class="wind-needle-svg" viewBox="0 0 32 32">
+          <circle cx="16" cy="16" r="14" fill="#0d1b2a" stroke="#d4ac0d" stroke-width="1.5"/>
+          <path id="hudWindArrow" d="M16 4 L21 16 L16 13 L11 16 Z" fill="#e74c3c"/>
+          <text x="16" y="26" text-anchor="middle" font-size="7" fill="#ecf0f1" font-weight="bold">WIND</text>
+        </svg>
+        <span id="hudWindKnots" class="wind-speed-label">12 kts</span>
+      </div>
+      <div class="hud-quick-buttons">
+        <button id="btnOpenQuests" class="btn-icon-hud" title="Quests & Relics">
+          <svg class="nav-icon"><use href="#icon-relic"/></svg>
+          <span id="questAlertBadge" class="hud-badge hidden">!</span>
+        </button>
+        <button id="btnOpenInventory" class="btn-icon-hud" title="Cargo Hold">
+          <svg class="nav-icon"><use href="#icon-scroll"/></svg>
+        </button>
+        <button id="btnOpenFleet" class="btn-icon-hud" title="Fleet & Ship">
+          <svg class="nav-icon"><use href="#icon-anchor"/></svg>
+        </button>
+        <button id="btnOpenAchievements" class="btn-icon-hud" title="Achievements">
+          <span class="trophy-symbol">🏆</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main id="appStage" class="app-stage">
+    
+    <!-- VIEW 1: START / MAIN MENU SCREEN -->
+    <section id="viewMainMenu" class="view-panel active-view">
+      <div class="menu-hero-wrap">
+        <div class="brand-hero-block">
+          <div class="crest-container">
+            <svg class="brand-crest-svg" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" fill="#102030" stroke="#d4af37" stroke-width="3"/>
+              <path d="M50 15 L58 40 L85 40 L63 56 L72 82 L50 66 L28 82 L37 56 L15 40 L42 40 Z" fill="#d4af37" opacity="0.3"/>
+              <use href="#icon-skull" x="25" y="25" width="50" height="50"/>
+            </svg>
+          </div>
+          <h1 class="main-title">THE PIRATES AND TRADERS RPG GAME</h1>
+          <h2 class="main-subtitle">BY SUBIN KHULLAR 😎</h2>
+          <p class="tagline">The Relics of the Tideborn • Year of Our Lord 1687</p>
+        </div>
+
+        <div class="parchment-menu-panel">
+          <div class="menu-buttons-vertical">
+            <button id="btnMenuNewGame" class="btn btn-menu btn-gold">
+              <svg class="btn-icon"><use href="#icon-swords"/></svg> New Journey
+            </button>
+            <button id="btnMenuContinue" class="btn btn-menu btn-primary" disabled>
+              <svg class="btn-icon"><use href="#icon-helm"/></svg> Continue Voyage
+            </button>
+            <button id="btnMenuSaveLoad" class="btn btn-menu btn-outline">
+              <svg class="btn-icon"><use href="#icon-scroll"/></svg> Logbooks & Saved Voyages
+            </button>
+            <button id="btnMenuAchievements" class="btn btn-menu btn-outline">
+              <span class="btn-icon">🏆</span> Ocean Hall of Fame (500)
+            </button>
+            <button id="btnMenuSettings" class="btn btn-menu btn-outline">
+              <span class="btn-icon">⚙️</span> Voyage Settings & Audio
+            </button>
+            <button id="btnMenuCredits" class="btn btn-menu btn-outline">
+              <span class="btn-icon">📜</span> Maritime Chronicles & Credits
+            </button>
+          </div>
+
+          <div class="menu-quick-stats">
+            <div id="saveSummaryInfo" class="save-summary-text">No active voyage saved in ship records.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: NEW GAME CHARACTER CREATION & PROLOGUE -->
+    <section id="viewNewGame" class="view-panel hidden">
+      <div class="modal-dialog-panel large-dialog parchment-scroll">
+        <header class="dialog-header">
+          <h2>Create Your Captain & Destiny</h2>
+          <button id="btnCancelNewGame" class="btn-close-dialog">&times;</button>
+        </header>
+        
+        <div class="creation-layout">
+          <!-- Step 1: Biography -->
+          <div class="creation-column">
+            <h3>1. Captain Identity</h3>
+            <div class="form-group">
+              <label for="charNameInput">Captain's Name:</label>
+              <input type="text" id="charNameInput" class="text-input" maxlength="24" value="Edward Vance">
+            </div>
+            
+            <div class="form-group">
+              <label for="charFlagshipInput">Flagship Name:</label>
+              <input type="text" id="charFlagshipInput" class="text-input" maxlength="28" value="The Sea Swallow">
+            </div>
+
+            <div class="form-group">
+              <label>Nationality & Starting Waters:</label>
+              <div class="radio-card-grid" id="nationalitySelectGrid">
+                <label class="radio-card selected" data-faction="Britain">
+                  <input type="radio" name="startingFaction" value="Britain" checked>
+                  <span class="radio-title">Kingdom of England</span>
+                  <span class="radio-desc">Royal Navy patronage, +10% Cannon Accuracy.</span>
+                </label>
+                <label class="radio-card" data-faction="Spain">
+                  <input type="radio" name="startingFaction" value="Spain">
+                  <span class="radio-title">Spanish Empire</span>
+                  <span class="radio-desc">Treasure galleon heritage, +20% Cargo Hold limit.</span>
+                </label>
+                <label class="radio-card" data-faction="Netherlands">
+                  <input type="radio" name="startingFaction" value="Netherlands">
+                  <span class="radio-title">Dutch Republic</span>
+                  <span class="radio-desc">Master merchants, -15% Trade tariffs in all ports.</span>
+                </label>
+                <label class="radio-card" data-faction="France">
+                  <input type="radio" name="startingFaction" value="France">
+                  <span class="radio-title">French Kingdom</span>
+                  <span class="radio-desc">Corsair finesse, +15% Ship maneuvering and speed.</span>
+                </label>
+                <label class="radio-card" data-faction="Pirate">
+                  <input type="radio" name="startingFaction" value="Pirate">
+                  <span class="radio-title">The Coast Brotherhood</span>
+                  <span class="radio-desc">Outlaws of the deep, +25% Boarding duel critical damage.</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Career Path & Starting Ship -->
+          <div class="creation-column">
+            <h3>2. Initial Career Path</h3>
+            <div class="radio-card-grid" id="careerSelectGrid">
+              <label class="radio-card selected" data-career="Merchant">
+                <input type="radio" name="charCareer" value="Merchant" checked>
+                <span class="radio-title">Merchant Factor</span>
+                <span class="radio-desc">Starts with Sloop, 800 gold, trade ledger, and port goodwill.</span>
+              </label>
+              <label class="radio-card" data-career="Privateer">
+                <input type="radio" name="charCareer" value="Privateer">
+                <span class="radio-title">Licensed Privateer</span>
+                <span class="radio-desc">Starts with Armed Cutter, letter of marque, 12 cannons, 500 gold.</span>
+              </label>
+              <label class="radio-card" data-career="Pirate">
+                <input type="radio" name="charCareer" value="Pirate">
+                <span class="radio-title">Free Corsair</span>
+                <span class="radio-desc">Starts with Raider Brig, fierce crew, bounty on head, 350 gold.</span>
+              </label>
+              <label class="radio-card" data-career="Explorer">
+                <input type="radio" name="charCareer" value="Explorer">
+                <span class="radio-title">Tideborn Seeker</span>
+                <span class="radio-desc">Starts with Fast Ketch, ancient Tideborn relic compass, 400 gold.</span>
+              </label>
+              <label class="radio-card" data-career="Smuggler">
+                <input type="radio" name="charCareer" value="Smuggler">
+                <span class="radio-title">Shadow Runner</span>
+                <span class="radio-desc">Hidden cargo compartments, black market access, contraband contacts.</span>
+              </label>
+            </div>
+
+            <h3 class="mt-4">3. Challenge Mode</h3>
+            <div class="form-group">
+              <select id="gameModeSelect" class="select-input">
+                <option value="Normal" selected>Normal — Standard economy, balanced combat</option>
+                <option value="Veteran">Veteran — Harsh storms, dynamic tariffs, strict crew salaries</option>
+                <option value="Hardcore">Hardcore — High mortality, brutal sea monsters, volatile markets</option>
+                <option value="Ironman">Ironman — Single save file, autosaved on every decision</option>
+                <option value="Permadeath">Permadeath — Death of captain or flagship permanently ends voyage</option>
+                <option value="Sandbox">Sandbox — Endless high-seas sandbox with maximum freedom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button id="btnLaunchNewGame" class="btn btn-gold btn-lg">
+            <svg class="btn-icon"><use href="#icon-anchor"/></svg> Sign Ship Articles & Cast Off
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: WORLD NAVIGATION (OCEAN MAP VIEW) -->
+    <section id="viewWorldMap" class="view-panel hidden">
+      <div class="canvas-viewport-container">
+        <!-- Main World Canvas -->
+        <canvas id="worldCanvas" class="world-canvas"></canvas>
+
+        <!-- World Mini HUD Floating Overlays -->
+        <div class="map-overlay-compass">
+          <svg class="ornate-rose" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="rgba(10,24,40,0.85)" stroke="#d4af37" stroke-width="2"/>
+            <polygon points="50,6 55,45 50,42 45,45" fill="#e74c3c"/>
+            <polygon points="50,94 55,55 50,58 45,55" fill="#bdc3c7"/>
+            <polygon points="94,50 55,55 58,50 55,45" fill="#bdc3c7"/>
+            <polygon points="6,50 45,55 42,50 45,45" fill="#bdc3c7"/>
+            <text x="50" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#f1c40f">N</text>
+            <text x="50" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#ecf0f1">S</text>
+            <text x="86" y="54" text-anchor="middle" font-size="11" font-weight="bold" fill="#ecf0f1">E</text>
+            <text x="14" y="54" text-anchor="middle" font-size="11" font-weight="bold" fill="#ecf0f1">W</text>
+          </svg>
+        </div>
+
+        <div class="map-overlay-weather" id="mapWeatherCard">
+          <span id="weatherIconDisplay" class="weather-icon">☀️</span>
+          <div class="weather-text-block">
+            <span id="weatherNameDisplay" class="weather-title">Fair Sea Breeze</span>
+            <span id="weatherEffectDisplay" class="weather-sub">Speed 100% • Calm Swell</span>
+          </div>
+        </div>
+
+        <!-- Port Interaction Callout (Pops up when near a port/island/wreck) -->
+        <div id="seaProximityPrompt" class="sea-proximity-panel hidden">
+          <div class="proximity-icon">⚓</div>
+          <div class="proximity-info">
+            <h4 id="proximityTargetName">Port Royal</h4>
+            <p id="proximityTargetDesc">Capital of British Caribbean • Safe Harbor</p>
+          </div>
+          <button id="btnProximityAction" class="btn btn-gold btn-sm">Drop Anchor</button>
+        </div>
+
+        <!-- On-Screen Virtual Sailing Helm Controls (Mobile / Touch Friendly) -->
+        <div class="touch-controls-pad" id="touchControlsPad">
+          <div class="helm-row">
+            <button id="btnHelmSailUp" class="btn-touch" title="Raise Sails / Accelerate">▲ Sails Full</button>
+          </div>
+          <div class="helm-row horizontal">
+            <button id="btnHelmPort" class="btn-touch" title="Turn Port / Left">◀ Port</button>
+            <button id="btnHelmAnchor" class="btn-touch btn-touch-center" title="Drop Anchor / Stop">⚓ Anchor</button>
+            <button id="btnHelmStarboard" class="btn-touch" title="Turn Starboard / Right">Starboard ▶</button>
+          </div>
+          <div class="helm-row">
+            <button id="btnHelmSailDown" class="btn-touch" title="Reef Sails / Slow Down">▼ Reef Sails</button>
+          </div>
+        </div>
+
+        <!-- Mini-Map Toggle -->
+        <div class="map-coordinates-plate">
+          <span id="coordsDisplay">Coords: X: 1420, Y: 890</span>
+          <button id="btnToggleWorldZoom" class="btn-mini-map" title="Toggle Sea Chart Overview">🗺️ Sea Chart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: PORT INTERIOR (TOWN, MARKET, SHIPYARD, TAVERN, GOVERNOR, BANK) -->
+    <section id="viewPort" class="view-panel hidden">
+      <div class="port-hub-wrapper">
+        <!-- Port Header Banner -->
+        <div class="port-banner-header">
+          <div class="port-title-group">
+            <h1 id="portName">Port Royal</h1>
+            <p id="portFactionAndType" class="port-subtitle">British Naval Citadel • Economic Boom • Prosperity: 88%</p>
+          </div>
+          <div class="port-header-actions">
+            <button id="btnDepartPort" class="btn btn-gold btn-lg">
+              <svg class="btn-icon"><use href="#icon-helm"/></svg> Set Sail to Sea
+            </button>
+          </div>
+        </div>
+
+        <!-- Port District Navigation Tabs -->
+        <nav class="port-tabs-bar">
+          <button class="port-tab active" data-district="market">
+            <svg class="tab-icon"><use href="#icon-scroll"/></svg> Commodity Bazaar
+          </button>
+          <button class="port-tab" data-district="shipyard">
+            <svg class="tab-icon"><use href="#icon-anchor"/></svg> Royal Drydock
+          </button>
+          <button class="port-tab" data-district="tavern">
+            <span class="tab-icon">🍺</span> The Salty Cutlass Tavern
+          </button>
+          <button class="port-tab" data-district="governor">
+            <span class="tab-icon">🏛️</span> Governor's Palace
+          </button>
+          <button class="port-tab" data-district="bank">
+            <svg class="tab-icon"><use href="#icon-gold"/></svg> Merchant Bank
+          </button>
+          <button class="port-tab" data-district="smugglers">
+            <svg class="tab-icon"><use href="#icon-skull"/></svg> Smuggler's Cove
+          </button>
+        </nav>
+
+        <!-- District 1: Commodity Bazaar -->
+        <div id="districtMarket" class="port-district-pane active">
+          <div class="market-split-grid">
+            <!-- Market Goods Table -->
+            <div class="parchment-panel market-goods-panel">
+              <div class="panel-header-row">
+                <h3>Port Stock & Trade Ledger</h3>
+                <span class="market-hint">Buy low at producing colonies; sell high at hungry ports!</span>
+              </div>
+              <div class="table-scroll-container">
+                <table class="market-table" id="marketTable">
+                  <thead>
+                    <tr>
+                      <th>Good</th>
+                      <th>Class</th>
+                      <th>Port Qty</th>
+                      <th>Local Price</th>
+                      <th>Hold Qty</th>
+                      <th>Avg Paid</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="marketTableBody">
+                    <!-- Populated dynamically by EconomyManager -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Trade Ledger / Hold Inspection -->
+            <div class="parchment-panel market-hold-panel">
+              <h3>Cargo Hold Status</h3>
+              <div class="hold-meter-block">
+                <div class="meter-info">
+                  <span id="holdCapacityLabel">Hold Weight: 15 / 60 tons</span>
+                  <span id="holdWeightPercent">25%</span>
+                </div>
+                <div class="progress-bar-shell">
+                  <div id="holdBarFill" class="progress-bar-fill fill-gold" style="width: 25%;"></div>
+                </div>
+              </div>
+
+              <h4 class="mt-3">Price Trends & Rumors</h4>
+              <div id="marketRumorList" class="market-rumors-box">
+                <p><em>"Rum is scarce in Tortuga due to corsair raids. Expect 150% profit!"</em></p>
+                <p><em>"Weapons in high demand in Havana as Spanish fleets mobilize."</em></p>
+              </div>
+
+              <div class="bulk-trade-actions mt-3">
+                <button id="btnSellAllCargo" class="btn btn-outline btn-block">Sell All Non-Contraband</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- District 2: Royal Drydock (Shipyard) -->
+        <div id="districtShipyard" class="port-district-pane hidden">
+          <div class="shipyard-grid">
+            <div class="parchment-panel">
+              <h3>Flagship Maintenance & Outfitting</h3>
+              <div class="shipyard-service-cards">
+                <div class="service-card">
+                  <h4>Full Hull Overhaul</h4>
+                  <p>Repair timbers, caulk pitch, scrape barnacles.</p>
+                  <p class="service-cost" id="shipyardRepairCost">Cost: 45 Gold</p>
+                  <button id="btnRepairHull" class="btn btn-primary btn-sm">Repair Ship</button>
+                </div>
+                <div class="service-card">
+                  <h4>Rigging & Sail Reinforcement</h4>
+                  <p>Equip fine canvas to boost sailing speed by +10%.</p>
+                  <p class="service-cost" id="shipyardSailCost">Cost: 180 Gold</p>
+                  <button id="btnUpgradeSails" class="btn btn-gold btn-sm">Upgrade Sails</button>
+                </div>
+                <div class="service-card">
+                  <h4>Broadside Cannon Foundry</h4>
+                  <p>Upgrade to Long Nine-Pounders for superior range.</p>
+                  <p class="service-cost" id="shipyardCannonsCost">Cost: 400 Gold</p>
+                  <button id="btnUpgradeCannons" class="btn btn-gold btn-sm">Refit Broadside</button>
+                </div>
+                <div class="service-card">
+                  <h4>Hold Expansion Compartments</h4>
+                  <p>Add reinforced bilge storage (+20 ton capacity).</p>
+                  <p class="service-cost" id="shipyardHoldCost">Cost: 350 Gold</p>
+                  <button id="btnUpgradeHold" class="btn btn-gold btn-sm">Expand Hold</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="parchment-panel">
+              <h3>Ships for Sale at Drydock</h3>
+              <div id="shipyardForSaleList" class="ship-for-sale-catalog">
+                <!-- Dynamically populated with Sloop, Frigate, Brigantine, Galleon, Man-o-War -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- District 3: The Salty Cutlass Tavern -->
+        <div id="districtTavern" class="port-district-pane hidden">
+          <div class="tavern-split-grid">
+            <!-- Left: Recruits & Patrons -->
+            <div class="parchment-panel">
+              <h3>Available Sailors & Mercenaries</h3>
+              <p class="sub-text">Hire hands to crew guns, hoist canvas, and board vessels.</p>
+              <div id="tavernCrewPool" class="crew-hire-list">
+                <!-- Populated dynamically -->
+              </div>
+              <div class="tavern-bulk-recruit mt-3">
+                <button id="btnRecruitStandardCrew" class="btn btn-gold">Hire 5 Deckhands (50 Gold)</button>
+                <button id="btnBuyTavernRound" class="btn btn-primary">Buy Round of Grog (+15 Morale, 25 Gold)</button>
+              </div>
+            </div>
+
+            <!-- Right: Tavern Dice Mini-Game & Gossip -->
+            <div class="parchment-panel">
+              <h3>Captain's Liar's Dice</h3>
+              <p class="sub-text">Wager gold against hardened privateers in the classic game of bones.</p>
+              <div class="dice-game-arena" id="diceArena">
+                <div class="dice-cup-row">
+                  <div class="dice-player-side">
+                    <h4>Your Dice</h4>
+                    <div id="playerDiceBox" class="dice-flex">[ 🎲 🎲 🎲 🎲 🎲 ]</div>
+                  </div>
+                  <div class="dice-vs">VS</div>
+                  <div class="dice-npc-side">
+                    <h4>Old Salt's Dice</h4>
+                    <div id="npcDiceBox" class="dice-flex">[ 🎲 🎲 🎲 🎲 🎲 ]</div>
+                  </div>
+                </div>
+                <div class="dice-controls mt-2">
+                  <input type="number" id="diceWagerInput" class="wager-input" value="50" min="10" max="500" step="10">
+                  <button id="btnRollDice" class="btn btn-gold btn-sm">Roll & Wager</button>
+                  <button id="btnCallLiar" class="btn btn-outline btn-sm" disabled>Call Bluff!</button>
+                </div>
+                <div id="diceOutcomeLog" class="dice-log-text">Place your wager to play.</div>
+              </div>
+
+              <h4 class="mt-3">Old Salt Whispers & Legends</h4>
+              <div id="tavernRumorBox" class="tavern-rumors-content">
+                <p><em>"A captain sailing past the Siren's Reef swore he saw the glowing wreckage of a Tideborn sunken temple."</em></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- District 4: Governor's Palace -->
+        <div id="districtGovernor" class="port-district-pane hidden">
+          <div class="parchment-panel">
+            <div class="governor-intro">
+              <h2 id="governorTitle">Audience with the Governor General</h2>
+              <p id="governorGreeting">
+                "Welcome, Captain. The Crown maintains order in these waters. Serve our cause, hunt pirates, or supply our outposts, and you shall be richly rewarded."
+              </p>
+            </div>
+
+            <div class="governor-commissions-grid">
+              <div class="commission-box">
+                <h4>Letters of Marque</h4>
+                <p>Gain legal authority to attack enemy crown vessels without pirate status.</p>
+                <p class="status-badge" id="marqueStatus">Not Commissioned</p>
+                <button id="btnBuyLetterOfMarque" class="btn btn-primary btn-sm mt-2">Purchase Patent (500 Gold)</button>
+              </div>
+
+              <div class="commission-box">
+                <h4>Active Naval Bounties</h4>
+                <div id="bountyListContainer" class="bounties-list">
+                  <!-- Dynamic boss/pirate bounties -->
+                </div>
+              </div>
+
+              <div class="commission-box">
+                <h4>Diplomatic Favors & Titles</h4>
+                <p>Elevate your nobility from Merchant to Knight Commander or Admiral.</p>
+                <div id="factionReputationBars" class="faction-bars mt-2">
+                  <!-- Reputations for Britain, Spain, France, Netherlands, Pirates -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- District 5: Merchant Bank & Investments -->
+        <div id="districtBank" class="port-district-pane hidden">
+          <div class="parchment-panel">
+            <h2>The Chartered High-Seas Bank</h2>
+            <p>Safeguard your fortune against plunder, take business loans, and purchase shares in trade companies.</p>
+
+            <div class="bank-grid mt-3">
+              <div class="bank-card">
+                <h4>Bank Vault Deposit</h4>
+                <p>Banked gold cannot be lost in shipwreck or pirate boarding.</p>
+                <div class="balance-display">Vaulted: <strong id="vaultBalanceDisplay">0 Gold</strong></div>
+                <div class="form-row mt-2">
+                  <input type="number" id="bankDepositInput" class="wager-input" placeholder="Amount" min="10">
+                  <button id="btnBankDeposit" class="btn btn-gold btn-sm">Deposit</button>
+                  <button id="btnBankWithdraw" class="btn btn-outline btn-sm">Withdraw</button>
+                </div>
+              </div>
+
+              <div class="bank-card">
+                <h4>Colonial Maritime Loan</h4>
+                <p>Borrow capital at 10% weekly interest. Failure to repay will attract bounty hunters!</p>
+                <div class="balance-display">Outstanding Debt: <strong id="bankDebtDisplay">0 Gold</strong></div>
+                <div class="form-row mt-2">
+                  <button id="btnTakeLoan" class="btn btn-primary btn-sm">Borrow 1,000 Gold</button>
+                  <button id="btnRepayLoan" class="btn btn-gold btn-sm">Pay 500 Gold</button>
+                </div>
+              </div>
+
+              <div class="bank-card">
+                <h4>Trade Route Monopolies</h4>
+                <p>Buy 25% equity in the East Indies Tea & Spice route for passive weekly dividends.</p>
+                <div class="balance-display">Owned Monopolies: <strong id="monopoliesCount">0</strong></div>
+                <button id="btnBuyMonopoly" class="btn btn-gold btn-sm mt-2">Buy Route Share (5,000 Gold)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- District 6: Smuggler's Cove (Black Market) -->
+        <div id="districtSmugglers" class="port-district-pane hidden">
+          <div class="parchment-panel contraband-panel">
+            <h2>Hidden Smuggler's Grotto</h2>
+            <p class="warning-text">⚠️ Warning: Contraband goods yield enormous profits (100%–600%), but carrying them carries steep confiscation and prison risks if searched by Royal Navy patrols!</p>
+            
+            <table class="market-table mt-3" id="smugglerTable">
+              <thead>
+                <tr>
+                  <th>Contraband Cargo</th>
+                  <th>Black Market Price</th>
+                  <th>Local Port Risk</th>
+                  <th>Hold Count</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="smugglerTableBody">
+                <!-- Dynamically populated with Opium, Stolen Royal Gems, Untaxed Gunpowder, Relic Curios -->
+              </tbody>
+            </table>
+
+            <div class="smuggler-special mt-3">
+              <h4>Bribe Port Harbor Master</h4>
+              <p>Reduces naval search chance at this port to 0% for the next 7 days.</p>
+              <button id="btnBribeHarborMaster" class="btn btn-gold btn-sm">Pay Bribe (300 Gold)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: NAVAL COMBAT ARENA VIEW -->
+    <section id="viewNavalCombat" class="view-panel hidden">
+      <div class="combat-viewport-container">
+        <!-- Canvas for tactical real-time or turn-based naval battle -->
+        <canvas id="combatCanvas" class="combat-canvas"></canvas>
+
+        <!-- Combat HUD Overlay -->
+        <div class="combat-top-overlay">
+          <!-- Player Ship Health Card -->
+          <div class="combat-ship-hud player-side">
+            <h3 id="combatPlayerShipName">Flagship</h3>
+            <div class="combat-stat-bars">
+              <div class="bar-unit">
+                <span>Hull</span>
+                <div class="progress-bar-shell"><div id="combatPlayerHullBar" class="progress-bar-fill fill-green" style="width: 100%;"></div></div>
+                <span id="combatPlayerHullText">100/100</span>
+              </div>
+              <div class="bar-unit">
+                <span>Sails</span>
+                <div class="progress-bar-shell"><div id="combatPlayerSailsBar" class="progress-bar-fill fill-blue" style="width: 100%;"></div></div>
+                <span id="combatPlayerSailsText">100%</span>
+              </div>
+              <div class="bar-unit">
+                <span>Crew</span>
+                <div class="progress-bar-shell"><div id="combatPlayerCrewBar" class="progress-bar-fill fill-gold" style="width: 100%;"></div></div>
+                <span id="combatPlayerCrewText">24</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Combat Center: Wind & Range -->
+          <div class="combat-center-hud">
+            <div class="combat-distance-box">
+              <span class="dist-label">Range to Target:</span>
+              <span id="combatDistanceValue" class="dist-val">280 yds</span>
+            </div>
+            <div class="combat-status-callout" id="combatCalloutText">Man your broadsides!</div>
+          </div>
+
+          <!-- Enemy Ship Health Card -->
+          <div class="combat-ship-hud enemy-side">
+            <h3 id="combatEnemyShipName">Spanish War Galleon</h3>
+            <div class="combat-stat-bars">
+              <div class="bar-unit">
+                <span>Hull</span>
+                <div class="progress-bar-shell"><div id="combatEnemyHullBar" class="progress-bar-fill fill-green" style="width: 100%;"></div></div>
+                <span id="combatEnemyHullText">180/180</span>
+              </div>
+              <div class="bar-unit">
+                <span>Sails</span>
+                <div class="progress-bar-shell"><div id="combatEnemySailsBar" class="progress-bar-fill fill-blue" style="width: 100%;"></div></div>
+                <span id="combatEnemySailsText">100%</span>
+              </div>
+              <div class="bar-unit">
+                <span>Crew</span>
+                <div class="progress-bar-shell"><div id="combatEnemyCrewBar" class="progress-bar-fill fill-gold" style="width: 100%;"></div></div>
+                <span id="combatEnemyCrewText">45</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Combat Action Controls Dock -->
+        <div class="combat-controls-dock">
+          <!-- Shot Type Selection -->
+          <div class="shot-selector-group">
+            <label class="shot-btn active" data-shot="round">
+              <input type="radio" name="cannonShotType" value="round" checked>
+              <span class="shot-name">Round Shot</span>
+              <span class="shot-desc">Breaks Hulls</span>
+            </label>
+            <label class="shot-btn" data-shot="chain">
+              <input type="radio" name="cannonShotType" value="chain">
+              <span class="shot-name">Chain Shot</span>
+              <span class="shot-desc">Shreds Sails</span>
+            </label>
+            <label class="shot-btn" data-shot="grape">
+              <input type="radio" name="cannonShotType" value="grape">
+              <span class="shot-name">Grape Shot</span>
+              <span class="shot-desc">Slices Crew</span>
+            </label>
+            <label class="shot-btn" data-shot="fire">
+              <input type="radio" name="cannonShotType" value="fire">
+              <span class="shot-name">Fire Bombs</span>
+              <span class="shot-desc">Burns Deck</span>
+            </label>
+          </div>
+
+          <!-- Maneuver & Fire Actions -->
+          <div class="combat-tactical-buttons">
+            <button id="btnCombatFireLeft" class="btn btn-fire" title="Fire Port Broadside">
+              💥 Fire Port
+            </button>
+            <button id="btnCombatManeuver" class="btn btn-primary" title="Tack with the Wind">
+              💨 Tack Wind
+            </button>
+            <button id="btnCombatFireRight" class="btn btn-fire" title="Fire Starboard Broadside">
+              💥 Fire Starboard
+            </button>
+            <button id="btnCombatBoardShip" class="btn btn-gold pulse-glow" disabled title="Grapple & Board when close!">
+              ⚔️ Board Enemy!
+            </button>
+            <button id="btnCombatFlee" class="btn btn-outline" title="Turn tail and run">
+              🏳️ Attempt Escape
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: BOARDING SWASHBUCKLING DUEL STAGE -->
+    <section id="viewDuel" class="view-panel hidden">
+      <div class="duel-stage-wrapper">
+        <header class="duel-header">
+          <h2>Captain's Boarding Duel</h2>
+          <p class="duel-subtitle">Cross cutlasses on the blood-soaked quarterdeck! Timing, combos, and stamina rule supreme.</p>
+        </header>
+
+        <div class="duel-arena-board">
+          <!-- Player Duelist Card -->
+          <div class="duelist-card player">
+            <div class="duelist-avatar-box">
+              <div class="avatar-sword-silhouette">🤺</div>
+              <h3 id="duelPlayerName">Captain Vance</h3>
+            </div>
+            <div class="duel-bars">
+              <div class="duel-bar-group">
+                <label>Health: <span id="duelPlayerHpVal">100</span></label>
+                <div class="progress-bar-shell"><div id="duelPlayerHpBar" class="progress-bar-fill fill-green" style="width: 100%;"></div></div>
+              </div>
+              <div class="duel-bar-group">
+                <label>Stamina: <span id="duelPlayerStaminaVal">100</span></label>
+                <div class="progress-bar-shell"><div id="duelPlayerStaminaBar" class="progress-bar-fill fill-gold" style="width: 100%;"></div></div>
+              </div>
+            </div>
+            <div id="duelPlayerBuffs" class="duel-buffs-row">
+              <span class="buff-chip">Balanced Stance</span>
+            </div>
+          </div>
+
+          <!-- Duel Center Log & Animation Stage -->
+          <div class="duel-center-stage">
+            <div id="duelClashVisual" class="duel-clash-box">
+              <span id="duelStanceIcon" class="clash-icon">⚔️</span>
+              <div id="duelActionBanner" class="clash-banner">Ready Your Blade!</div>
+            </div>
+            <div id="duelCombatLog" class="duel-log-box">
+              <p><em>The duel begins! Watch your opponent's stance carefully.</em></p>
+            </div>
+          </div>
+
+          <!-- Enemy Duelist Card -->
+          <div class="duelist-card enemy">
+            <div class="duelist-avatar-box">
+              <div class="avatar-sword-silhouette enemy-tint">🏴‍☠️</div>
+              <h3 id="duelEnemyName">Captain Ramirez</h3>
+            </div>
+            <div class="duel-bars">
+              <div class="duel-bar-group">
+                <label>Health: <span id="duelEnemyHpVal">120</span></label>
+                <div class="progress-bar-shell"><div id="duelEnemyHpBar" class="progress-bar-fill fill-red" style="width: 100%;"></div></div>
+              </div>
+              <div class="duel-bar-group">
+                <label>Stamina: <span id="duelEnemyStaminaVal">80</span></label>
+                <div class="progress-bar-shell"><div id="duelEnemyStaminaBar" class="progress-bar-fill fill-gold" style="width: 80%;"></div></div>
+              </div>
+            </div>
+            <div id="duelEnemyBuffs" class="duel-buffs-row">
+              <span class="buff-chip enemy">Aggressive Slash Stance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duel Action Command Matrix -->
+        <div class="duel-command-matrix">
+          <button id="btnDuelSlash" class="btn btn-duel" data-action="slash">
+            <strong>Slash</strong>
+            <small>Quick strike (15 Sta)</small>
+          </button>
+          <button id="btnDuelHeavy" class="btn btn-duel" data-action="heavy">
+            <strong>Heavy Cleave</strong>
+            <small>High damage, breaks guard (35 Sta)</small>
+          </button>
+          <button id="btnDuelThrust" class="btn btn-duel" data-action="thrust">
+            <strong>Lunge Thrust</strong>
+            <small>Armor piercing (25 Sta)</small>
+          </button>
+          <button id="btnDuelParry" class="btn btn-duel-def" data-action="parry">
+            <strong>Parry & Riposte</strong>
+            <small>Counterattack window (20 Sta)</small>
+          </button>
+          <button id="btnDuelDodge" class="btn btn-duel-def" data-action="dodge">
+            <strong>Dodge Roll</strong>
+            <small>Evade heavy blow (20 Sta)</small>
+          </button>
+          <button id="btnDuelPistol" class="btn btn-duel-special" data-action="pistol">
+            <strong>Flintlock Shot</strong>
+            <small>Unblockable (1 Ammo / 2 left)</small>
+          </button>
+          <button id="btnDuelDirtyTrick" class="btn btn-duel-special" data-action="dirty">
+            <strong>Sand in Eyes</strong>
+            <small>Stuns foe (15 Sta)</small>
+          </button>
+          <button id="btnDuelDefend" class="btn btn-duel-def" data-action="rest">
+            <strong>Recover Breath</strong>
+            <small>Regain +40 Stamina</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: PLUNDER & BOARDING LOOT SCREEN (MODAL VIEW) -->
+    <section id="viewPlunder" class="view-panel hidden">
+      <div class="modal-dialog-panel parchment-scroll">
+        <header class="dialog-header">
+          <h2>Victory! Plunder the Defeated Prize</h2>
+        </header>
+
+        <div class="plunder-body">
+          <div class="plunder-summary-card">
+            <h3 id="plunderVesselName">Defeated Prize: Spanish Merchant Brig</h3>
+            <p id="plunderTonnageInfo">Tonnage: 120 tons • Condition: Crippled</p>
+          </div>
+
+          <div class="loot-display-grid">
+            <div class="loot-box">
+              <h4>Gold Doubloons Plundered</h4>
+              <div class="loot-gold-val"><span id="plunderGoldValue">450</span> Gold</div>
+            </div>
+            <div class="loot-box">
+              <h4>Recovered Cargo</h4>
+              <ul id="plunderCargoList" class="loot-item-list">
+                <!-- Dynamically filled with looted goods -->
+              </ul>
+            </div>
+          </div>
+
+          <div class="prize-ship-options mt-3">
+            <h4>Fate of the Prize Vessel:</h4>
+            <div class="fate-radio-group">
+              <label class="radio-card selected">
+                <input type="radio" name="prizeFate" value="loot" checked>
+                <span class="radio-title">Strip Cargo & Scuttle</span>
+                <span class="radio-desc">Take all gold and cargo; sink the hull into Davy Jones' locker.</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="prizeFate" value="capture">
+                <span class="radio-title">Take Prize into Fleet</span>
+                <span class="radio-desc">Assign 6 crew members to sail this vessel as an armed escort or merchant transport.</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="prizeFate" value="flagship">
+                <span class="radio-title">Make New Flagship</span>
+                <span class="radio-desc">Transfer your captain's flag to this vessel and decommission your older ship.</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="dialog-footer">
+          <button id="btnClaimPlunder" class="btn btn-gold btn-lg">Secure Plunder & Return to Sea</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 8: FLEET & SHIP MANAGEMENT -->
+    <section id="viewFleetModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel large-dialog parchment-scroll">
+        <header class="dialog-header">
+          <h2>Naval Fleet & Flagship Registry</h2>
+          <button class="btn-close-modal" data-close="viewFleetModal">&times;</button>
+        </header>
+
+        <div class="fleet-content-grid">
+          <div class="fleet-list-column">
+            <h3>Armada Ships (Max 4 Vessels)</h3>
+            <div id="fleetVesselsList" class="vessels-card-stack">
+              <!-- Dynamically populated fleet cards -->
+            </div>
+          </div>
+
+          <div class="flagship-details-column">
+            <h3 id="inspectedShipName">Flagship Details</h3>
+            <div id="inspectedShipSpecs" class="ship-spec-sheet">
+              <!-- Ship stats: Speed, Armor, Guns, Cargo, Crew, Upgrades -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 9: CREW ROSTER & OFFICERS -->
+    <section id="viewCrewModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel large-dialog parchment-scroll">
+        <header class="dialog-header">
+          <h2>Ship's Crew Compliment & Officers</h2>
+          <button class="btn-close-modal" data-close="viewCrewModal">&times;</button>
+        </header>
+
+        <div class="crew-content-wrap">
+          <div class="crew-summary-banner">
+            <div>Total Hands: <strong id="crewTotalCount">18</strong> / <span id="crewMaxCap">25</span></div>
+            <div>Morale: <strong id="crewMoraleText">High (85%)</strong></div>
+            <div>Weekly Payroll: <strong id="crewPayrollText">54 Gold</strong></div>
+          </div>
+
+          <div class="crew-officer-slots">
+            <h3>Specialist Officers</h3>
+            <div class="officers-grid" id="officerSlotsGrid">
+              <!-- Navigator, Quartermaster, Gunner, Cook, Doctor, Carpenter -->
+            </div>
+          </div>
+
+          <h3 class="mt-4">Deckhands & Sailors</h3>
+          <div class="table-scroll-container">
+            <table class="market-table" id="crewTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Level / Skill</th>
+                  <th>Trait</th>
+                  <th>Loyalty</th>
+                  <th>Weekly Wage</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="crewTableBody">
+                <!-- Dynamically filled crew members -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 10: INVENTORY & CARGO HOLD -->
+    <section id="viewInventoryModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel parchment-scroll">
+        <header class="dialog-header">
+          <h2>Ship's Hold & Captain's Strongbox</h2>
+          <button class="btn-close-modal" data-close="viewInventoryModal">&times;</button>
+        </header>
+
+        <div class="inventory-modal-body">
+          <div class="hold-capacity-summary">
+            <span>Total Weight: <strong id="invHoldWeight">15</strong> / <span id="invHoldMax">60</span> tons</span>
+            <span>Liquid Wealth: <strong id="invGoldDoubloons">500</strong> Gold Doubloons</span>
+          </div>
+
+          <h3>Commodities in Hold</h3>
+          <div class="table-scroll-container">
+            <table class="market-table" id="inventoryTable">
+              <thead>
+                <tr>
+                  <th>Cargo Item</th>
+                  <th>Tonnage</th>
+                  <th>Base Value</th>
+                  <th>Classification</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mt-4">Captain's Personal Relics & Curios</h3>
+          <div id="personalCuriosList" class="curios-grid">
+            <!-- Ancient compasses, charts, rings, gems -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 11: QUEST LOG, ACT SYSTEM & TIDEBORN RELIC VAULT -->
+    <section id="viewQuestModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel large-dialog parchment-scroll">
+        <header class="dialog-header">
+          <h2>Story Chronicles & The 5 Tideborn Relics</h2>
+          <button class="btn-close-modal" data-close="viewQuestModal">&times;</button>
+        </header>
+
+        <div class="quest-log-layout">
+          <!-- Act & Story Milestone Progression -->
+          <div class="quest-story-column">
+            <div class="current-act-badge">
+              <span class="act-roman" id="questActRoman">ACT I</span>
+              <div class="act-info">
+                <h3 id="questActTitle">Rise From Nothing</h3>
+                <p id="questActDesc">Learn the trade winds, build your treasury, recruit a sturdy crew, and locate the first fragment of the lost Tideborn Sea Chart.</p>
+              </div>
+            </div>
+
+            <h4 class="mt-3">Active Sea Quests & Contracts</h4>
+            <div id="activeQuestsList" class="active-quests-stack">
+              <!-- Dynamically populated quests -->
+            </div>
+          </div>
+
+          <!-- The 5 Ancient Tideborn Relics Hunt -->
+          <div class="relic-vault-column">
+            <h3>The Crown of the Endless Sea</h3>
+            <p class="sub-text">Recover all 5 pre-cataclysm relics of the Tideborn Empire to unlock dominion over all world trade routes.</p>
+            
+            <div class="relics-grid" id="relicVaultGrid">
+              <div class="relic-slot" data-relic="1">
+                <div class="relic-icon">🧭</div>
+                <h4>The Astrolabe of Tides</h4>
+                <p class="relic-status unrecovered" id="relicStatus1">Hidden in Siren's Reef</p>
+              </div>
+              <div class="relic-slot" data-relic="2">
+                <div class="relic-icon">🔱</div>
+                <h4>The Trident of Calamity</h4>
+                <p class="relic-status unrecovered" id="relicStatus2">Guarded by Ghost Captain Graves</p>
+              </div>
+              <div class="relic-slot" data-relic="3">
+                <div class="relic-icon">💎</div>
+                <h4>The Abyssal Pearl</h4>
+                <p class="relic-status unrecovered" id="relicStatus3">Sunken in the Great Whirlpool</p>
+              </div>
+              <div class="relic-slot" data-relic="4">
+                <div class="relic-icon">📜</div>
+                <h4>The Leviathan Cipher</h4>
+                <p class="relic-status unrecovered" id="relicStatus4">Buried on Isla de la Muerte</p>
+              </div>
+              <div class="relic-slot" data-relic="5">
+                <div class="relic-icon">👑</div>
+                <h4>The Crown of Endless Sea</h4>
+                <p class="relic-status unrecovered" id="relicStatus5">Locked in the Sunken Capital</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 12: ACHIEVEMENTS HALL OF FAME (500 ACHIEVEMENTS ENGINE) -->
+    <section id="viewAchievementsModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel large-dialog parchment-scroll">
+        <header class="dialog-header">
+          <h2>Ocean Hall of Fame (500 Achievements)</h2>
+          <button class="btn-close-modal" data-close="viewAchievementsModal">&times;</button>
+        </header>
+
+        <div class="achievements-wrap">
+          <div class="achievements-summary-header">
+            <div>Total Unlocked: <strong id="achieveUnlockedCount">0</strong> / 500</div>
+            <div>Completion: <strong id="achievePercent">0%</strong></div>
+            <div class="achieve-tier-filters">
+              <button class="filter-chip active" data-tier="all">All</button>
+              <button class="filter-chip" data-tier="Bronze">Bronze</button>
+              <button class="filter-chip" data-tier="Silver">Silver</button>
+              <button class="filter-chip" data-tier="Gold">Gold</button>
+              <button class="filter-chip" data-tier="Platinum">Platinum</button>
+              <button class="filter-chip" data-tier="Legendary">Legendary</button>
+            </div>
+          </div>
+
+          <div id="achievementsGridContainer" class="achievements-grid mt-3">
+            <!-- Dynamically populated achievement cards -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 13: SAVE / LOAD / SETTINGS / CREDITS -->
+    <section id="viewSettingsModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel parchment-scroll">
+        <header class="dialog-header">
+          <h2>Ship's Logbook, Audio & Settings</h2>
+          <button class="btn-close-modal" data-close="viewSettingsModal">&times;</button>
+        </header>
+
+        <div class="settings-body">
+          <h3>Save & Load Management</h3>
+          <div class="save-actions-grid">
+            <button id="btnManualSave" class="btn btn-gold">
+              💾 Save Voyage Now (Slot 1)
+            </button>
+            <button id="btnManualLoad" class="btn btn-primary">
+              📂 Load Saved Voyage
+            </button>
+            <button id="btnExportSave" class="btn btn-outline">
+              📤 Export Save to JSON File
+            </button>
+            <label class="btn btn-outline file-input-label">
+              📥 Import Save from JSON
+              <input type="file" id="importSaveFileInput" accept=".json" style="display:none;">
+            </label>
+          </div>
+          <p id="saveTimestampLabel" class="save-timestamp-note">Last saved: Never</p>
+
+          <h3 class="mt-4">Synthesizer & Audio Settings</h3>
+          <div class="audio-sliders-group">
+            <div class="slider-row">
+              <label for="masterVolumeRange">Master Volume:</label>
+              <input type="range" id="masterVolumeRange" min="0" max="1" step="0.05" value="0.7">
+            </div>
+            <div class="slider-row">
+              <label for="sfxVolumeRange">Cannons & Combat SFX:</label>
+              <input type="range" id="sfxVolumeRange" min="0" max="1" step="0.05" value="0.8">
+            </div>
+            <div class="slider-row">
+              <label for="ambientVolumeRange">Ocean Waves & Sea Wind:</label>
+              <input type="range" id="ambientVolumeRange" min="0" max="1" step="0.05" value="0.6">
+            </div>
+          </div>
+
+          <h3 class="mt-4">Chronicles & Attributions</h3>
+          <div class="credits-box">
+            <p><strong>The Pirates and Traders RPG Game</strong></p>
+            <p>Designed, Programmed & Produced by <strong>Subin Khullar 😎</strong></p>
+            <p>Spiritual successor to <em>Sid Meier's Pirates!, Port Royale, Sea Dogs, and Uncharted Waters</em>.</p>
+            <p>100% Offline Progressive Web Application • Vanilla JavaScript & Web Audio API Engine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL / VIEW 14: PAUSE / IN-GAME MENU OVERLAY -->
+    <section id="viewPauseModal" class="modal-backdrop hidden">
+      <div class="modal-dialog-panel parchment-box pause-modal">
+        <h2>Voyage Paused</h2>
+        <div class="pause-menu-stack mt-3">
+          <button id="btnResumeGame" class="btn btn-gold btn-block">Resume Voyage</button>
+          <button id="btnPauseSave" class="btn btn-primary btn-block">Quick Save Logbook</button>
+          <button id="btnPauseSettings" class="btn btn-outline btn-block">Settings & Audio</button>
+          <button id="btnPauseQuitMenu" class="btn btn-outline btn-block">Retire to Main Menu</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MANDATORY PERMANENT FOOTER -->
+  <footer id="mandatoryFooter" class="mandatory-game-footer">
+    <div class="footer-inner">
+      <span class="footer-title">The Pirates and Traders RPG Game by Subin Khullar 😎</span>
+      <span class="footer-bullet">•</span>
+      <span class="footer-copyright">Copyright ©️ 2026 Subin Khullar. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Main Game Script Architecture -->
+  <script src="app.js"></script>
+</body>
+</html>
